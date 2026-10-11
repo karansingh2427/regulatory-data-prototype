@@ -464,9 +464,8 @@ function render(a) {
       <dt>AI is allowed to</dt><dd>${a.ai}</dd>
     </dl>
     <div class="flow">
-      <div class="node source"><strong>Source</strong>${a.short}</div>
-      <span class="arrow">→</span>
-      ${a.consumers.map(c => `<div class="node"><strong>Consumer</strong>${c}</div>`).join('<span class="arrow">→</span>')}
+      <div class="node source"><strong>Where it is created</strong>${a.short}</div>
+      ${a.consumers.map(c => `<div class="node"><strong>Also shows it</strong>${c}</div>`).join("")}
     </div>
     <p class="note">${a.rule}</p>`;
 }
