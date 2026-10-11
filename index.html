@@ -117,8 +117,9 @@
     background: var(--paper);
     border: 1px solid var(--line);
     padding: 8px 10px;
-    width: 148px;
+    width: 210px;
   }
+  .gloss { color: var(--muted); font-size: 13px; max-width: 70ch; }
   .node strong { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
   .node.source { background: var(--ochre-bg); border-color: transparent; }
   .arrow { color: var(--muted); }
@@ -172,7 +173,7 @@
       <button type="button" role="tab" aria-selected="false" data-view="domains">2 · Five domains<small>Global, local, source</small></button>
       <button type="button" role="tab" aria-selected="false" data-view="trace">3 · Follow one fact<small>Click an attribute</small></button>
       <button type="button" role="tab" aria-selected="false" data-view="rules">4 · Variation rules<small>What we agree once</small></button>
-      <button type="button" role="tab" aria-selected="false" data-view="pilot">5 · Ninety-day pilot<small>Attached to SDS in EDMS</small></button>
+      <button type="button" role="tab" aria-selected="false" data-view="pilot">5 · Ninety-day pilot<small>Attached to the safety data sheet work</small></button>
       <button type="button" role="tab" aria-selected="false" data-view="ask">6 · Questions<small>Where I expect to be wrong</small></button>
     </div>
   </nav>
@@ -225,22 +226,22 @@
             <td>Substance and safety</td>
             <td>Substance identity, classification rule</td>
             <td>Country SDS wording, some exposure scenarios</td>
-            <td>The SDS being placed in SAP-EDMS for EU/EEA</td>
-            <td>Label, DoPC safety, substance steering, passport</td>
+            <td>The safety data sheet being placed in SAP-EDMS, the document system, for the EU and EEA</td>
+            <td>Label, the declaration of performance and conformity, substance steering, passport</td>
           </tr>
           <tr>
             <td>Performance</td>
             <td>Characteristic and test-method identity</td>
             <td>Declared value for a spec and a market</td>
             <td>Conformity / lab record — this is the open question</td>
-            <td>DoPC, passport, BIM</td>
+            <td>Declaration of performance and conformity, passport, building information model</td>
           </tr>
           <tr>
             <td>Supplier and pack</td>
-            <td>Substance in the article, SVHC flag</td>
+            <td>Substance in the pack, including a flag if it is on the EU list of substances of very high concern</td>
             <td>Pack copy, plant-specific declaration</td>
             <td>Procurement declaration plus pack master</td>
-            <td>Label, PPWR, passport</td>
+            <td>Label, packaging rules, passport</td>
           </tr>
           <tr>
             <td>Approved phrases</td>
@@ -257,6 +258,7 @@
     <section class="view" id="trace">
       <h2>Follow one fact through the company.</h2>
       <p class="lead">Illustrative EU admixture. None of these values are a real Sika formulation. The point is the path.</p>
+      <p class="gloss">SDS, safety data sheet. H-statement, standard hazard sentence. DoPC, declaration of performance and conformity. CE, the mark that the product may be sold in the EU. Passport, the digital product page opened from a code on the pack. BIM, building information model, the software model of a building. EDMS, the document system that stores the approved file. PIM, the product-information system. SAP, the main system for materials and plants.</p>
       <div class="split">
         <div class="attrs" id="attrList"></div>
         <div class="detail" id="detail"></div>
@@ -350,7 +352,7 @@ const attrs = [
     source: "SAP material master, after the group template is the master",
     meaning: "Product master owner",
     steward: "MDM steward in Data Management",
-    consumers: ["PIM", "Label", "Passport identifier"],
+    consumers: ["PIM: product-information system", "Label", "Passport: product identity on the digital page"],
     ai: "May be used. It is an identifier, not a generated fact.",
     rule: "One persistent ID per product type. A selling SKU in a country points at it. It does not replace it."
   },
@@ -365,13 +367,13 @@ const attrs = [
     source: "Substance record used by the SDS and by the substance-risk steerco",
     meaning: "Product stewardship / EHSQ",
     steward: "Substance data steward",
-    consumers: ["SDS section 3", "Label", "Procurement block", "Formulation constraint", "Passport"],
+    consumers: ["SDS section 3: safety data sheet", "Label", "Procurement block", "Formulation constraint", "Passport: digital page from a code on the pack"],
     ai: "A model may read it as a constraint. It may not invent a second substance list.",
     rule: "The ban decision and the SDS sentence are two views of one substance. If steering keeps a spreadsheet, the passport will drift."
   },
   {
     id: "h",
-    name: "H-statement",
+    name: "H-statement (hazard sentence)",
     kind: "Reference data + governed phrase",
     cls: "ref",
     scope: "Global meaning, local language",
@@ -380,13 +382,13 @@ const attrs = [
     source: "Phrase library, selected by the classification rule",
     meaning: "Product safety owns the classification; regulatory owns the phrase text",
     steward: "Phrase steward",
-    consumers: ["SDS section 2", "Label", "Instructions for use"],
+    consumers: ["SDS section 2: safety data sheet", "Label", "Instructions for use"],
     ai: "An agent may propose the phrase from an approved SDS. A person approves a new mapping. After that, the phrase ID is reused.",
     rule: "Wrong reference data breaks every product that uses it. Do not store the sentence inside each product row."
   },
   {
     id: "lang",
-    name: "SDS wording, country language",
+    name: "SDS wording (safety data sheet)",
     kind: "Governed content",
     cls: "content",
     scope: "Local",
@@ -395,7 +397,7 @@ const attrs = [
     source: "Approved SDS file in SAP-EDMS for that country",
     meaning: "Country EHS for the wording; global safety for the meaning",
     steward: "SDS process owner inside the EDMS programme",
-    consumers: ["Country SDS publication", "Label in that language"],
+    consumers: ["Country SDS: safety data sheet", "Label in that language"],
     ai: "Translation can be assisted. Publication stays on the approved file. The English meaning does not fork per country.",
     rule: "This is the live NEXUS workstream. The pilot should hang off it, not beside it."
   },
@@ -410,7 +412,7 @@ const attrs = [
     source: "Unknown. Likely a lab or conformity system, not the SDS and not SAP.",
     meaning: "Product conformity",
     steward: "Not named — this is the gap",
-    consumers: ["DoPC", "CE information", "Passport", "BIM"],
+    consumers: ["DoPC: declaration of performance and conformity", "CE: mark that it may be sold in the EU", "Passport: digital page from a code on the pack", "BIM: building information model"],
     ai: "Blocked. No source, no owner, no quality rule. A model must not fill a declared value.",
     rule: "Article 76 includes the declaration. If this value has no system of record, that is the first line of the gap tracker. System 3+ means a notified body will validate environmental inputs. Guessed numbers will not survive that."
   },
@@ -425,7 +427,7 @@ const attrs = [
     source: "LCA tool, validated under assessment system 3+",
     meaning: "Sustainability with Product Conformity",
     steward: "Open",
-    consumers: ["DoPC", "Passport", "Customer and BIM tools"],
+    consumers: ["DoPC: declaration of performance and conformity", "Passport: digital page from a code on the pack", "BIM: building information model"],
     ai: "May help prepare an inventory. The declared number comes from the validated assessment, not from the model.",
     rule: "DoPC adds environmental characteristics the old declaration did not carry. Treat the indicator as its own attribute, with the assessment file kept in the document system as evidence."
   },
@@ -440,7 +442,7 @@ const attrs = [
     source: "Company master, selected by market",
     meaning: "Legal / finance for the entity; regulatory for who is the manufacturer on the declaration",
     steward: "Master-data steward",
-    consumers: ["SDS header", "DoPC", "Passport operator ID"],
+    consumers: ["SDS header: safety data sheet", "DoPC: declaration of performance and conformity", "Passport: who places the product on the market"],
     ai: "Read only.",
     rule: "Same pattern as a registration holder. It is master data with a country key. It is not one global value, and it is not free text on the PDF."
   }
