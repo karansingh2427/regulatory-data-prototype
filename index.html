@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>One product, one source — discussion prototype</title>
+<title>The label method, applied to a construction product</title>
 <style>
   :root {
     --bg: #f3f0e8;
@@ -17,11 +17,9 @@
     --green-bg: #e5efe9;
     --red: #7a2e24;
     --red-bg: #f6e6e2;
-    --blue: #243e55;
-    --blue-bg: #e6eef3;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; }
+  html, body { margin: 0; }
   body {
     font-family: "Segoe UI", system-ui, sans-serif;
     color: var(--ink);
@@ -29,15 +27,15 @@
     font-size: 15px;
     line-height: 1.45;
   }
-  button, select { font: inherit; color: inherit; }
+  button { font: inherit; color: inherit; cursor: pointer; }
   header {
+    padding: 22px 28px 16px;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
     display: flex;
     justify-content: space-between;
     gap: 24px;
     align-items: flex-end;
-    padding: 22px 28px 16px;
-    border-bottom: 1px solid var(--line);
-    background: var(--paper);
   }
   h1 {
     font-family: Palatino, "Palatino Linotype", Georgia, serif;
@@ -46,47 +44,6 @@
     margin: 0 0 4px;
     letter-spacing: -0.02em;
   }
-  .sub { margin: 0; color: var(--muted); max-width: 720px; }
-  .tools { display: flex; gap: 8px; flex-shrink: 0; }
-  .tools button, .nav button, .attr, .chip {
-    background: transparent;
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    padding: 7px 10px;
-    cursor: pointer;
-  }
-  .tools button[aria-pressed="true"], .nav button[aria-selected="true"], .attr[aria-pressed="true"] {
-    background: var(--ink);
-    color: var(--paper);
-    border-color: var(--ink);
-  }
-  .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 92px); }
-  nav {
-    padding: 16px 12px;
-    border-right: 1px solid var(--line);
-  }
-  .nav { display: flex; flex-direction: column; gap: 6px; }
-  .nav button { text-align: left; background: transparent; }
-  .nav small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
-  .nav button[aria-selected="true"] small { color: #d9d2c5; }
-  main { padding: 22px 28px 48px; max-width: 1080px; }
-  .view { display: none; }
-  .view.active { display: block; }
-  h2 {
-    font-family: Palatino, "Palatino Linotype", Georgia, serif;
-    font-size: 22px;
-    font-weight: 600;
-    margin: 0 0 8px;
-  }
-  .lead { margin: 0 0 18px; max-width: 68ch; }
-  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  .block {
-    background: var(--paper);
-    border: 1px solid var(--line);
-    padding: 14px 14px 12px;
-  }
-  .block h3 { margin: 0 0 6px; font-size: 15px; }
-  .block p { margin: 0; color: var(--muted); }
   .kicker {
     font-size: 11px;
     letter-spacing: 0.08em;
@@ -94,65 +51,74 @@
     color: var(--ochre);
     margin: 0 0 6px;
   }
-  table { width: 100%; border-collapse: collapse; background: var(--paper); }
-  th, td { text-align: left; vertical-align: top; padding: 10px 10px; border-bottom: 1px solid var(--line); }
-  th { font-size: 12px; color: var(--muted); font-weight: 600; }
-  .split { display: grid; grid-template-columns: 280px 1fr; gap: 18px; align-items: start; }
-  .attrs { display: flex; flex-direction: column; gap: 6px; }
-  .attr { text-align: left; background: var(--paper); }
-  .attr span { display: block; font-size: 12px; color: var(--muted); }
-  .attr[aria-pressed="true"] span { color: #d9d2c5; }
-  .detail h3 { margin: 0 0 4px; font-size: 20px; font-family: Palatino, Georgia, serif; }
-  .meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 14px; }
-  .tag { font-size: 12px; padding: 3px 8px; border-radius: 99px; border: 1px solid var(--line); }
-  .tag.master { background: var(--blue-bg); color: var(--blue); border-color: transparent; }
-  .tag.ref { background: var(--ochre-bg); color: var(--ochre); border-color: transparent; }
-  .tag.content { background: var(--green-bg); color: var(--green); border-color: transparent; }
-  .tag.local { background: var(--red-bg); color: var(--red); border-color: transparent; }
-  dl { display: grid; grid-template-columns: 160px 1fr; gap: 8px 12px; margin: 0; }
-  dt { color: var(--muted); }
-  dd { margin: 0; }
-  .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; }
-  .node {
+  .sub { margin: 0; color: var(--muted); max-width: 680px; }
+  header button, .nav button, .pick {
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 7px 10px;
+  }
+  header button[aria-pressed="true"], .nav button[aria-selected="true"], .pick[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .layout { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 96px); }
+  nav { padding: 16px 12px; border-right: 1px solid var(--line); }
+  .nav { display: flex; flex-direction: column; gap: 6px; }
+  .nav button { text-align: left; }
+  .nav small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .nav button[aria-selected="true"] small { color: #d9d2c5; }
+  main { padding: 22px 28px 64px; max-width: 980px; }
+  .view { display: none; }
+  .view.active { display: block; }
+  h2 {
+    font-family: Palatino, Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  .lead { margin: 0 0 16px; max-width: 68ch; }
+  ol.steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+  ol.steps li {
     background: var(--paper);
     border: 1px solid var(--line);
-    padding: 8px 10px;
-    width: 210px;
+    padding: 12px 14px;
   }
-  .gloss { color: var(--muted); font-size: 13px; max-width: 70ch; }
-  .node strong { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
-  .node.source { background: var(--ochre-bg); border-color: transparent; }
-  .arrow { color: var(--muted); }
-  .note {
-    margin-top: 16px;
-    padding-top: 12px;
-    border-top: 1px solid var(--line);
-    color: var(--muted);
+  ol.steps strong { display: block; }
+  table { width: 100%; border-collapse: collapse; background: var(--paper); }
+  th, td { text-align: left; vertical-align: top; padding: 10px; border-bottom: 1px solid var(--line); }
+  th { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .picks { display: flex; gap: 8px; margin-bottom: 14px; }
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    padding: 14px;
   }
-  .qs { list-style: none; padding: 0; margin: 0; }
-  .qs li {
-    padding: 12px 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .qs strong { display: block; margin-bottom: 4px; }
-  .drawer {
-    display: none;
-    position: sticky;
-    bottom: 0;
-    background: #241f1a;
-    color: #f3f0e8;
-    padding: 14px 28px 18px;
-  }
-  .drawer.open { display: block; }
-  .drawer h2 { color: #f3f0e8; font-size: 16px; margin-bottom: 6px; }
-  .drawer p { margin: 0; max-width: 90ch; }
-  footer {
-    padding: 8px 28px 20px;
-    color: var(--muted);
+  .tag {
+    display: inline-block;
     font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 99px;
+    margin-bottom: 8px;
   }
-  @media (max-width: 900px) {
-    .layout, .grid3, .split { grid-template-columns: 1fr; }
+  .tag.known { background: var(--green-bg); color: var(--green); }
+  .tag.gap { background: var(--red-bg); color: var(--red); }
+  .readers { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .readers div {
+    background: var(--ochre-bg);
+    padding: 8px 10px;
+    width: 180px;
+  }
+  .readers strong { display: block; font-size: 12px; }
+  .note { margin-top: 14px; color: var(--muted); }
+  .drawer { display: none; background: #241f1a; color: #f3f0e8; padding: 14px 28px 18px; }
+  .drawer.open { display: block; }
+  .drawer h2 { color: #f3f0e8; font-size: 16px; }
+  .drawer p { margin: 0; max-width: 85ch; }
+  footer { padding: 8px 28px 24px; color: var(--muted); font-size: 12px; }
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; }
     nav { border-right: 0; border-bottom: 1px solid var(--line); }
     .nav { flex-direction: row; flex-wrap: wrap; }
   }
@@ -161,331 +127,160 @@
 <body>
 <header>
   <div>
-    <p class="kicker">Discussion prototype · not a system design</p>
-    <h1>One product. One source. Four consumers.</h1>
-    <p class="sub">How regulatory facts for a construction chemical should move into an SDS, a declaration, a label, and a construction digital product passport — without a second copy. Illustrative product. Public regulation and public Sika programmes.</p>
+    <p class="kicker">Discussion draft · the method, not a new system</p>
+    <h1>Write the fact once. Generate the pack from it.</h1>
+    <p class="sub">The method used for digital crop-protection labels, applied to a construction product. Illustrative product. No new database.</p>
   </div>
 </header>
 <div class="layout">
   <nav>
     <div class="nav" role="tablist">
-      <button type="button" role="tab" aria-selected="true" data-view="problem">1 · The problem<small>Passport, not a new document</small></button>
-      <button type="button" role="tab" aria-selected="false" data-view="domains">2 · Five domains<small>Global, local, source</small></button>
-      <button type="button" role="tab" aria-selected="false" data-view="trace">3 · Follow one fact<small>Click an attribute</small></button>
-      <button type="button" role="tab" aria-selected="false" data-view="rules">4 · Variation rules<small>What we agree once</small></button>
-      <button type="button" role="tab" aria-selected="false" data-view="pilot">5 · Ninety-day pilot<small>Attached to the safety data sheet work</small></button>
-      <button type="button" role="tab" aria-selected="false" data-view="ask">6 · Questions<small>Where I expect to be wrong</small></button>
+      <button type="button" role="tab" aria-selected="true" data-view="method">1 · The method<small>Four questions, already used</small></button>
+      <button type="button" role="tab" aria-selected="false" data-view="split">2 · Same facts<small>Crop label and construction pack</small></button>
+      <button type="button" role="tab" aria-selected="false" data-view="facts">3 · Two facts<small>One I know, one I will not guess</small></button>
+      <button type="button" role="tab" aria-selected="false" data-view="pilot">4 · Ninety days<small>Then two questions</small></button>
     </div>
   </nav>
   <main>
-    <section class="view active" id="problem">
-      <h2>The passport is not a new document.</h2>
-      <p class="lead">Regulation (EU) 2024/3110 already tells a manufacturer what the construction digital product passport must carry. Article 76 lists the declaration of performance and conformity, instructions and safety information, technical documentation, the label, unique identifiers, and other Union-law documents. Sika largely has that content. It does not yet have it as one product-type identity that a machine, a country, and a customer can trust.</p>
-      <div class="grid3">
-        <article class="block">
-          <p class="kicker">Two histories</p>
-          <h3>One product, more than one master</h3>
-          <p>MBCC (Master Builders Construction Chemicals) was BASF’s construction-chemicals business. Sika acquired it in 2023, so many products still have two histories. Fast Forward, presented in November 2025, uses that integration to finish a group ERP rollout, with a public target around the beginning of 2027. A regulatory attribute that still lives in both will be published twice.</p>
-        </article>
-        <article class="block">
-          <p class="kicker">Documents first</p>
-          <h3>SDS and DoP are outputs today</h3>
-          <p>A public 2020 case study describes Sika’s document platform taking content from SAP Hybris PIM and Schema ST4, so staff see the approved file. That solves “which PDF.” The passport also needs the fields inside the PDF, kept current, and tied to the product type.</p>
-        </article>
-        <article class="block">
-          <p class="kicker">AI is already funded</p>
-          <h3>Formulation models need the same ID</h3>
-          <p>Sika has said publicly that formulation work on cement additives, mortars and admixtures is already using a large lab data set. An agent that drafts a declaration or blocks a substance is a consumer of regulatory data. It is not the place where that data is born.</p>
-        </article>
-      </div>
-      <p class="note">Timing, said carefully: the regulation entered into force on 7 January 2025 and applies in phases, as new harmonised technical specifications are published. The construction passport system itself depends on a Commission act. The current public timetable points to Q2 2027, and the manufacturer duty follows 18 months after that act enters into force. There is no single date to put on a steerco slide. There is a data model to agree before that act arrives.</p>
+    <section class="view active" id="method">
+      <h2>Start from the fact, not from the Word file.</h2>
+      <p class="lead">Crop-protection products are sold in many countries. The pack label says what is in the product, how to use it, the hazard, and who may sell it. That text lived in Word files, PDFs, and shared folders. People copied it from one system to another. The change was to name each fact, give it one home, and generate the label from those facts.</p>
+      <ol class="steps">
+        <li><strong>What must be the same in every country?</strong> The product, the substance, and the meaning of a hazard sentence.</li>
+        <li><strong>What must stay in the country?</strong> The language, the legal entity, the registration number, and the dose.</li>
+        <li><strong>Which system creates the fact?</strong> Product data in the material system. Safety in the safety data sheet. Approval in the registration record. The label only reads them.</li>
+        <li><strong>What is the smallest pilot?</strong> One country set, an agreed list of facts, and a label produced from that list. Local holes go on a gap list. They do not become a second copy.</li>
+      </ol>
+      <p class="note">A farmer can scan a code on the pack and see the current approved label information. That channel is AgriGuide, across 27 EU countries. The code was the easy part. The work was one structure, and keeping the digital text aligned with the approved label. If they differ, the approved label wins.</p>
     </section>
 
-    <section class="view" id="domains">
-      <h2>Five domains. A source named for each.</h2>
-      <p class="lead">These are hypotheses to test with Product Conformity, EHSQ and Data Management. I am not asserting Sika’s current system of record.</p>
+    <section class="view" id="split">
+      <h2>The construction pack asks the same four questions.</h2>
+      <p class="lead">A construction chemical also needs a pack text, a safety data sheet, and a signed performance statement. Europe is adding a page a contractor can open from a code on the pack. That page is the digital product passport. It should read the same facts. It should not become another place where people retype them.</p>
       <table>
         <thead>
           <tr>
-            <th>Domain</th>
-            <th>What must be global</th>
-            <th>What stays local</th>
-            <th>Likely source to test</th>
-            <th>Who consumes it</th>
+            <th>Fact</th>
+            <th>On a crop label, the home we used</th>
+            <th>On a construction pack, the home to test</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Product</td>
-            <td>Product-type identity, trade-name family</td>
-            <td>Country SKU, language, selling entity</td>
-            <td>SAP material master, once the group template is the master</td>
-            <td>PIM, label, passport ID</td>
+            <td>What is in it</td>
+            <td>The substance, from the product record and the safety data sheet</td>
+            <td>The substance, from the safety data sheet. One record for the safety team and for purchasing</td>
           </tr>
           <tr>
-            <td>Substance and safety</td>
-            <td>Substance identity, classification rule</td>
-            <td>Country SDS wording, some exposure scenarios</td>
-            <td>The safety data sheet being placed in SAP-EDMS, the document system, for the EU and EEA</td>
-            <td>Label, the declaration of performance and conformity, substance steering, passport</td>
+            <td>Hazard sentence</td>
+            <td>An approved sentence, stored once and reused</td>
+            <td>The same. The safety data sheet and the pack both use that sentence</td>
           </tr>
           <tr>
-            <td>Performance</td>
-            <td>Characteristic and test-method identity</td>
-            <td>Declared value for a spec and a market</td>
-            <td>Conformity / lab record — this is the open question</td>
-            <td>Declaration of performance and conformity, passport, building information model</td>
+            <td>How it is used, or how well it performs</td>
+            <td>Crop, pest, and dose. Kept in the country. Not forced into one global product row</td>
+            <td>The declared performance number. Home not known yet. That is a gap, the way dose stayed local</td>
           </tr>
           <tr>
-            <td>Supplier and pack</td>
-            <td>Substance in the pack, including a flag if it is on the EU list of substances of very high concern</td>
-            <td>Pack copy, plant-specific declaration</td>
-            <td>Procurement declaration plus pack master</td>
-            <td>Label, packaging rules, passport</td>
+            <td>Who may sell it</td>
+            <td>Registration holder, different by country</td>
+            <td>The Sika company on the document, different by country</td>
           </tr>
           <tr>
-            <td>Approved phrases</td>
-            <td>Phrase identity and meaning</td>
-            <td>Language and authority wording</td>
-            <td>A governed phrase library, not the last Word file</td>
-            <td>SDS, label, instructions for use</td>
+            <td>What the user sees</td>
+            <td>The pack label, and the page a farmer opens by scanning the code</td>
+            <td>The pack label, the performance declaration, and the page a contractor opens by scanning the code</td>
           </tr>
         </tbody>
       </table>
-      <p class="note">Product, substance, legal entity and pack are master data. Hazard class, unit, phrase ID and country code are reference data. The approved sentence is governed content. A published SDS version is an event. Mixing those four is how a second copy appears.</p>
+      <p class="note">After the MBCC purchase, some products still have two histories. MBCC was BASF’s construction-chemicals business, bought in 2023. Two histories means the same fact can be published twice. The rule stays the same: connect to the home, do not make a second one.</p>
     </section>
 
-    <section class="view" id="trace">
-      <h2>Follow one fact through the company.</h2>
-      <p class="lead">Illustrative EU admixture. None of these values are a real Sika formulation. The point is the path.</p>
-      <p class="gloss">SDS, safety data sheet. H-statement, standard hazard sentence. DoPC, declaration of performance and conformity. CE, the mark that the product may be sold in the EU. Passport, the digital product page opened from a code on the pack. BIM, building information model, the software model of a building. EDMS, the document system that stores the approved file. PIM, the product-information system. SAP, the main system for materials and plants.</p>
-      <div class="split">
-        <div class="attrs" id="attrList"></div>
-        <div class="detail" id="detail"></div>
-      </div>
-    </section>
-
-    <section class="view" id="rules">
-      <h2>Four rules, agreed once.</h2>
-      <div class="grid3">
-        <article class="block">
-          <p class="kicker">Rule 1</p>
-          <h3>Connect, do not copy</h3>
-          <p>The label, the country SDS file, the DoPC and the passport read the attribute. They do not become a new home for it. A gap is written down. It is not filled by retyping.</p>
-        </article>
-        <article class="block">
-          <p class="kicker">Rule 2</p>
-          <h3>Three owners, or a fight</h3>
-          <p>A business owner defines the meaning. A system of record creates the value. A steward fixes quality. The passport, the artwork tool and any model are consumers. Mixing those roles is why ownership looks unclear.</p>
-        </article>
-        <article class="block">
-          <p class="kicker">Rule 3</p>
-          <h3>Local is a key, not a second model</h3>
-          <p>Language, legal entity, plant and a declared value per specification stay country- or plant-specific. They hang off the global ID. They do not justify another product master.</p>
-        </article>
-      </div>
-      <article class="block" style="margin-top:14px">
-        <p class="kicker">Rule 4</p>
-        <h3>AI reads a trusted attribute or it does not run</h3>
-        <p>An extraction agent is useful when the source is still a document and a person checks the result. It is the wrong design once the attribute has a source, an owner and a quality rule. Formulation models and passport assembly should consume the governed value. They should not invent a parallel one. Human review stays on the exception queue, not on every field.</p>
-      </article>
+    <section class="view" id="facts">
+      <h2>Two facts. Only one of them has a home I can name.</h2>
+      <div class="picks" id="picks"></div>
+      <div id="fact"></div>
     </section>
 
     <section class="view" id="pilot">
-      <h2>Ninety days, on work already in flight.</h2>
-      <p class="lead">The pilot attaches to the EU/EEA SDS load into SAP-EDMS. It does not start a new platform.</p>
+      <h2>Ninety days, on work already moving.</h2>
+      <p class="lead">The safety data sheets for the EU are already being stored in the document system. Start there. Do not start a new platform, and do not start with the country that only has Word files.</p>
       <table>
         <thead>
-          <tr><th></th><th>In</th><th>Out</th></tr>
+          <tr><th></th><th>Do</th><th>Leave out</th></tr>
         </thead>
         <tbody>
           <tr>
             <td>Scope</td>
-            <td>One product family already in the EU/EEA SDS work. One EU product type. About fifteen attributes that Article 76 will need and that an SDS or the material master already holds.</td>
-            <td>All 103 countries. Artwork. Replacing PIM or the document system. A public passport.</td>
+            <td>One product family already in that safety-document work. About fifteen facts the passport will have to repeat.</td>
+            <td>All countries. Artwork. A new database. A public passport.</td>
           </tr>
           <tr>
-            <td>Done when</td>
-            <td>Each attribute has a named source, a meaning-owner, a steward, and two consumers only: the EDMS record and a passport skeleton. Duplicates are listed, not migrated.</td>
-            <td>A new golden-record database. A trained model. A governance council charter.</td>
+            <td>For each fact</td>
+            <td>Name the home, the person who defines the meaning, and the person who fixes bad data. If there is no home, write it on the gap list.</td>
+            <td>Retyping the missing fact into a spreadsheet so the demo looks complete.</td>
           </tr>
           <tr>
-            <td>Order of the backlog</td>
-            <td>Regulatory deadline, how many documents reuse the attribute, and whether a real source already exists.</td>
-            <td>Starting with the country that only has Word files.</td>
-          </tr>
-          <tr>
-            <td>Steerco line</td>
-            <td>We can name the source for the safety and identity facts a future DoPC and passport must repeat. We have a gap list for performance data, which is the open domain.</td>
-            <td>We bought a tool.</td>
+            <td>Show</td>
+            <td>The safety facts can be read from the approved safety document. The performance number is on the gap list.</td>
+            <td>A model filling in a performance number.</td>
           </tr>
         </tbody>
       </table>
-      <p class="note">Why this family: admixtures already show up in Sika’s public formulation-AI examples, and they sit in construction-product regulation. If performance data has no source, that is the finding. The pilot is allowed to discover a gap.</p>
-    </section>
-
-    <section class="view" id="ask">
-      <h2>Where I expect you to correct me.</h2>
-      <ol class="qs">
-        <li><strong>Is NEXUS the customer of this role, or is the first customer Product Conformity?</strong> I can design for the passport and the SDS programme. I need to know who accepts the model.</li>
-        <li><strong>When an SDS lands in SAP-EDMS, is the PDF the record, or is a structured payload stored with it?</strong> That single answer decides whether the pilot is modelling or extraction.</li>
-        <li><strong>Where is a substance ban decided, relative to the sentence in the SDS?</strong> Steering and the safety document cannot keep two lists.</li>
-        <li><strong>Which product family already has a declaration and a clean material master?</strong> I would start there, not with the messiest country.</li>
-        <li><strong>What does year one have to show the NEXUS steerco?</strong> I would rather copy your measure than invent one.</li>
-      </ol>
+      <p class="note">Two questions. When a safety document is stored, do you keep only the PDF, or also the individual facts? Which system creates the performance number that the declaration and the passport must show?</p>
     </section>
   </main>
 </div>
 <footer>
-  Public sources: Regulation (EU) 2024/3110 Art. 76; FPS Economy FAQ, updated 21 Aug 2025; European Commission DPP timeline, construction delegated act indicated Q2 2027; Sika Fast Forward, 27 Nov 2025; Sika pages on a single source of truth and the AI platform; 2020 case study on the document system with SAP Hybris PIM and Schema ST4. Values on screen 3 are illustrative, not a Sika formulation.
+  AgriGuide is the CropLife Europe digital-label channel: a farmer scans a code and sees the current approved use and safety information. The digital text does not replace the approved label. Construction passport content is Article 76 of Regulation (EU) 2024/3110: the declaration, safety information, the label, and the product identity. Values on the next screens are illustrative.
 </footer>
 <script>
-const attrs = [
-  {
-    id: "id",
-    name: "Product-type ID",
-    kind: "Master data",
-    cls: "master",
-    scope: "Global",
-    example: "PT-ADM-10042",
-    short: "SAP material master",
-    source: "SAP material master, after the group template is the master",
-    meaning: "Product master owner",
-    steward: "MDM steward in Data Management",
-    consumers: ["PIM: product-information system", "Label", "Passport: product identity on the digital page"],
-    ai: "May be used. It is an identifier, not a generated fact.",
-    rule: "One persistent ID per product type. A selling SKU in a country points at it. It does not replace it."
+const facts = {
+  hazard: {
+    label: "Hazard sentence",
+    cls: "known",
+    status: "I have done this",
+    body: "On a crop label, the hazard sentence is written once as an approved phrase. The safety data sheet and the pack both use it. A person approves a new phrase. After that, it is reused. A model may propose the phrase from an existing safety document. It may not invent a second list.",
+    from: "Safety data sheet",
+    readers: ["Pack label", "Safety document", "Page opened by scanning the code"]
   },
-  {
-    id: "sub",
-    name: "Substance identity",
-    kind: "Master data",
-    cls: "master",
-    scope: "Global",
-    example: "CAS 000-00-0 · illustrative",
-    short: "Substance record",
-    source: "Substance record used by the SDS and by the substance-risk steerco",
-    meaning: "Product stewardship / EHSQ",
-    steward: "Substance data steward",
-    consumers: ["SDS section 3: safety data sheet", "Label", "Procurement block", "Formulation constraint", "Passport: digital page from a code on the pack"],
-    ai: "A model may read it as a constraint. It may not invent a second substance list.",
-    rule: "The ban decision and the SDS sentence are two views of one substance. If steering keeps a spreadsheet, the passport will drift."
-  },
-  {
-    id: "h",
-    name: "H-statement (hazard sentence)",
-    kind: "Reference data + governed phrase",
-    cls: "ref",
-    scope: "Global meaning, local language",
-    example: "H315 · illustrative",
-    short: "Phrase library",
-    source: "Phrase library, selected by the classification rule",
-    meaning: "Product safety owns the classification; regulatory owns the phrase text",
-    steward: "Phrase steward",
-    consumers: ["SDS section 2: safety data sheet", "Label", "Instructions for use"],
-    ai: "An agent may propose the phrase from an approved SDS. A person approves a new mapping. After that, the phrase ID is reused.",
-    rule: "Wrong reference data breaks every product that uses it. Do not store the sentence inside each product row."
-  },
-  {
-    id: "lang",
-    name: "SDS wording (safety data sheet)",
-    kind: "Governed content",
-    cls: "content",
-    scope: "Local",
-    example: "Section 2, German · illustrative",
-    short: "Country SDS in SAP-EDMS",
-    source: "Approved SDS file in SAP-EDMS for that country",
-    meaning: "Country EHS for the wording; global safety for the meaning",
-    steward: "SDS process owner inside the EDMS programme",
-    consumers: ["Country SDS: safety data sheet", "Label in that language"],
-    ai: "Translation can be assisted. Publication stays on the approved file. The English meaning does not fork per country.",
-    rule: "This is the live NEXUS workstream. The pilot should hang off it, not beside it."
-  },
-  {
-    id: "perf",
-    name: "Declared performance",
-    kind: "Structured value, local to a specification",
-    cls: "local",
-    scope: "Global method, local value",
-    example: "Water reduction 18% · illustrative",
-    short: "No source yet",
-    source: "Unknown. Likely a lab or conformity system, not the SDS and not SAP.",
-    meaning: "Product conformity",
-    steward: "Not named — this is the gap",
-    consumers: ["DoPC: declaration of performance and conformity", "CE: mark that it may be sold in the EU", "Passport: digital page from a code on the pack", "BIM: building information model"],
-    ai: "Blocked. No source, no owner, no quality rule. A model must not fill a declared value.",
-    rule: "Article 76 includes the declaration. If this value has no system of record, that is the first line of the gap tracker. System 3+ means a notified body will validate environmental inputs. Guessed numbers will not survive that."
-  },
-  {
-    id: "gwp",
-    name: "Environmental indicator",
-    kind: "Structured value",
-    cls: "local",
-    scope: "Method global, result per product type",
-    example: "GWP module A1–A3 · illustrative",
-    short: "Validated LCA",
-    source: "LCA tool, validated under assessment system 3+",
-    meaning: "Sustainability with Product Conformity",
-    steward: "Open",
-    consumers: ["DoPC: declaration of performance and conformity", "Passport: digital page from a code on the pack", "BIM: building information model"],
-    ai: "May help prepare an inventory. The declared number comes from the validated assessment, not from the model.",
-    rule: "DoPC adds environmental characteristics the old declaration did not carry. Treat the indicator as its own attribute, with the assessment file kept in the document system as evidence."
-  },
-  {
-    id: "entity",
-    name: "Legal entity on the document",
-    kind: "Master data, country key",
-    cls: "master",
-    scope: "Local",
-    example: "Sika entity, Germany · illustrative",
-    short: "Company master",
-    source: "Company master, selected by market",
-    meaning: "Legal / finance for the entity; regulatory for who is the manufacturer on the declaration",
-    steward: "Master-data steward",
-    consumers: ["SDS header: safety data sheet", "DoPC: declaration of performance and conformity", "Passport: who places the product on the market"],
-    ai: "Read only.",
-    rule: "Same pattern as a registration holder. It is master data with a country key. It is not one global value, and it is not free text on the PDF."
+  performance: {
+    label: "Performance number",
+    cls: "gap",
+    status: "I will not guess this",
+    body: "On a crop label, the dose and the crop stayed in the country. Forcing them into one global product row would have made the label wrong. The construction equivalent is the declared performance, for example how much an admixture reduces water. The declaration, the CE mark, the passport, and the building model all need that number. I do not know which system creates it. That missing home goes on the gap list. A model must not fill it in.",
+    from: "No home yet",
+    readers: ["Performance declaration", "CE mark", "Passport", "Building model"]
   }
-];
+};
 
-const list = document.getElementById("attrList");
-const detail = document.getElementById("detail");
-
-function render(a) {
-  detail.innerHTML = `
-    <h3>${a.name}</h3>
-    <div class="meta">
-      <span class="tag ${a.cls}">${a.kind}</span>
-      <span class="tag">${a.scope}</span>
-      <span class="tag">${a.example}</span>
-    </div>
-    <dl>
-      <dt>Source to test</dt><dd>${a.source}</dd>
-      <dt>Owner of meaning</dt><dd>${a.meaning}</dd>
-      <dt>Steward</dt><dd>${a.steward}</dd>
-      <dt>AI is allowed to</dt><dd>${a.ai}</dd>
-    </dl>
-    <div class="flow">
-      <div class="node source"><strong>Where it is created</strong>${a.short}</div>
-      ${a.consumers.map(c => `<div class="node"><strong>Also shows it</strong>${c}</div>`).join("")}
-    </div>
-    <p class="note">${a.rule}</p>`;
+const picks = document.getElementById("picks");
+const fact = document.getElementById("fact");
+function showFact(key) {
+  const f = facts[key];
+  document.querySelectorAll(".pick").forEach(b => b.setAttribute("aria-pressed", b.dataset.key === key ? "true" : "false"));
+  fact.innerHTML = `
+    <article class="card">
+      <span class="tag ${f.cls}">${f.status}</span>
+      <h2>${f.label}</h2>
+      <p>${f.body}</p>
+      <div class="readers">
+        <div><strong>Created in</strong>${f.from}</div>
+        ${f.readers.map(r => `<div><strong>Shown on</strong>${r}</div>`).join("")}
+      </div>
+    </article>`;
 }
-
-attrs.forEach((a, i) => {
+Object.entries(facts).forEach(([key, f], i) => {
   const b = document.createElement("button");
   b.type = "button";
-  b.className = "attr";
-  b.setAttribute("aria-pressed", i === 1 ? "true" : "false");
-  b.innerHTML = `${a.name}<span>${a.scope}</span>`;
-  b.addEventListener("click", () => {
-    document.querySelectorAll(".attr").forEach(x => x.setAttribute("aria-pressed", "false"));
-    b.setAttribute("aria-pressed", "true");
-    render(a);
-  });
-  list.appendChild(b);
+  b.className = "pick";
+  b.dataset.key = key;
+  b.textContent = f.label;
+  b.setAttribute("aria-pressed", i === 0 ? "true" : "false");
+  b.addEventListener("click", () => showFact(key));
+  picks.appendChild(b);
 });
-render(attrs[1]);
+showFact("hazard");
 
 const views = document.querySelectorAll(".view");
 const tabs = document.querySelectorAll(".nav button");
@@ -494,7 +289,7 @@ function show(id) {
   tabs.forEach(t => t.setAttribute("aria-selected", t.dataset.view === id ? "true" : "false"));
 }
 tabs.forEach(t => t.addEventListener("click", () => show(t.dataset.view)));
-show("problem");
+show("method");
 
 </script>
 </body>
