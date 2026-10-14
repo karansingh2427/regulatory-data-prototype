@@ -112,10 +112,15 @@
   }
   .readers strong { display: block; font-size: 12px; }
   .note { margin-top: 14px; color: var(--muted); }
-  .drawer { display: none; background: #241f1a; color: #f3f0e8; padding: 14px 28px 18px; }
-  .drawer.open { display: block; }
-  .drawer h2 { color: #f3f0e8; font-size: 16px; }
-  .drawer p { margin: 0; max-width: 85ch; }
+  .flow { width: 100%; height: auto; margin: 0 0 18px; background: var(--paper); border: 1px solid var(--line); }
+  .flow text { font-family: "Segoe UI", system-ui, sans-serif; fill: var(--ink); }
+  .flow .box { fill: var(--paper); stroke: var(--ink); stroke-width: 1.2; }
+  .flow .gapbox { fill: var(--red-bg); stroke: var(--red); stroke-width: 1.4; stroke-dasharray: 5 4; }
+  .flow .hub { fill: var(--green-bg); stroke: var(--green); stroke-width: 1.4; }
+  .flow .ln { stroke: var(--ink); stroke-width: 1.3; fill: none; }
+  .flow .gapln { stroke: var(--red); stroke-width: 1.3; fill: none; stroke-dasharray: 5 4; }
+  .flow .cap { font-size: 11px; fill: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .flow .sm { font-size: 11px; fill: var(--muted); }
   footer { padding: 8px 28px 24px; color: var(--muted); font-size: 12px; }
   @media (max-width: 860px) {
     .layout { grid-template-columns: 1fr; }
@@ -127,9 +132,9 @@
 <body>
 <header>
   <div>
-    <p class="kicker">Discussion draft · the method, not a new system</p>
+    <p class="kicker">For discussion · the method, not a new system</p>
     <h1>Write the fact once. Generate the pack from it.</h1>
-    <p class="sub">The method used for digital crop-protection labels, applied to a construction product. Illustrative product. No new database.</p>
+    <p class="sub">The method used for digital crop-protection labels, applied to a construction product. No new system, no new database.</p>
   </div>
 </header>
 <div class="layout">
@@ -157,6 +162,30 @@
     <section class="view" id="split">
       <h2>The construction pack asks the same four questions.</h2>
       <p class="lead">A construction chemical also needs a pack text, a safety data sheet, and a signed performance statement. Europe is adding a page a contractor can open from a code on the pack. That page is the digital product passport. It should read the same facts. It should not become another place where people retype them.</p>
+      <svg class="flow" viewBox="0 0 760 250" role="img" aria-label="Each fact has one home. The pack label, the performance declaration and the passport page read from those homes. The performance number has no home yet.">
+        <text class="cap" x="16" y="20">Where the fact is created</text>
+        <text class="cap" x="526" y="20">What reads it</text>
+        <rect class="box" x="16" y="32" width="210" height="52" rx="3"/>
+        <text x="28" y="54" font-size="14">Safety data sheet</text><text class="sm" x="28" y="72">substance, hazard sentence</text>
+        <rect class="box" x="16" y="98" width="210" height="52" rx="3"/>
+        <text x="28" y="120" font-size="14">Company record</text><text class="sm" x="28" y="138">the Sika company on the document</text>
+        <rect class="gapbox" x="16" y="164" width="210" height="52" rx="3"/>
+        <text x="28" y="186" font-size="14">Performance number</text><text class="sm" x="28" y="204" style="fill:var(--red)">no home yet: gap list</text>
+        <rect class="hub" x="316" y="32" width="128" height="184" rx="3"/>
+        <text x="380" y="110" font-size="14" text-anchor="middle">Read, never</text>
+        <text x="380" y="130" font-size="14" text-anchor="middle">retyped</text>
+        <path class="ln" d="M226 58H316M226 124H316"/>
+        <path class="gapln" d="M226 190H316"/>
+        <path class="ln" d="M444 58H526M444 124H526"/>
+        <path class="gapln" d="M444 190H526"/>
+        <rect class="box" x="526" y="32" width="218" height="52" rx="3"/>
+        <text x="538" y="54" font-size="14">Pack text</text><text class="sm" x="538" y="72">and safety data sheet</text>
+        <rect class="box" x="526" y="98" width="218" height="52" rx="3"/>
+        <text x="538" y="120" font-size="14">Performance declaration</text><text class="sm" x="538" y="138">needs the number</text>
+        <rect class="box" x="526" y="164" width="218" height="52" rx="3"/>
+        <text x="538" y="186" font-size="14">Passport page</text><text class="sm" x="538" y="204">opened by scanning a code</text>
+        <text class="sm" x="16" y="240">Dashed red = a home that does not exist yet. It stays a gap; it is not filled by hand or by a model.</text>
+      </svg>
       <table>
         <thead>
           <tr>
@@ -193,7 +222,7 @@
           </tr>
         </tbody>
       </table>
-      <p class="note">After the MBCC purchase, some products still have two histories. MBCC was BASF’s construction-chemicals business, bought in 2023. Two histories means the same fact can be published twice. The rule stays the same: connect to the home, do not make a second one.</p>
+      <p class="note">After the MBCC purchase, some products still have two histories. MBCC was formerly BASF’s construction-chemicals business; Sika closed the purchase in May 2023. Two histories means the same fact can be published twice. The rule stays the same: connect to the home, do not make a second one.</p>
     </section>
 
     <section class="view" id="facts">
@@ -232,7 +261,7 @@
   </main>
 </div>
 <footer>
-  AgriGuide is the CropLife Europe digital-label channel: a farmer scans a code and sees the current approved use and safety information. The digital text does not replace the approved label. Construction passport content is Article 76 of Regulation (EU) 2024/3110: the declaration, safety information, the label, and the product identity. Values on the next screens are illustrative.
+  AgriGuide is the CropLife Europe digital-label channel: a farmer scans a code and sees the current approved use and safety information. The digital text does not replace the approved label. The construction passport comes from the digital product passport chapter of Regulation (EU) 2024/3110, which covers the declaration of performance, safety information, labelling, and product identifiers. Sika-specific system names are not assumed anywhere on this page.
 </footer>
 <script>
 const facts = {
